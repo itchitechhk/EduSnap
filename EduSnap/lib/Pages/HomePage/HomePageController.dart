@@ -36,6 +36,14 @@ class HomePageController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void update(JournalEntry current, JournalEntry updated) {
+    final index = entries.indexOf(current);
+    if (index < 0) return;
+    entries[index] = updated;
+    _sortByTitle();
+    notifyListeners();
+  }
+
   void _sortByTitle() {
     entries.sort(
       (a, b) => b.title.toLowerCase().compareTo(a.title.toLowerCase()),

@@ -4,7 +4,9 @@ import '../../Models/JournalEntry.dart';
 import 'AddPageController.dart';
 
 class AddPage extends StatefulWidget {
-  const AddPage({super.key});
+  const AddPage({super.key, this.entry});
+
+  final JournalEntry? entry;
 
   @override
   State<AddPage> createState() => _AddPageState();
@@ -19,6 +21,11 @@ class _AddPageState extends State<AddPage> {
   void initState() {
     super.initState();
     _controller = AddPageController();
+    final entry = widget.entry;
+    if (entry != null) {
+      _titleController.text = entry.title;
+      _noteController.text = entry.note;
+    }
     _titleController.addListener(_onFieldChanged);
     _noteController.addListener(_onFieldChanged);
   }
@@ -37,9 +44,13 @@ class _AddPageState extends State<AddPage> {
     setState(() {});
   }
 
-  bool get _hasUnsavedData =>
-      _titleController.text.trim().isNotEmpty ||
-      _noteController.text.trim().isNotEmpty;
+  bool get _hasUnsavedData {
+    final title = _titleController.text.trim();
+    final note = _noteController.text.trim();
+    final entry = widget.entry;
+    if (entry == null) return title.isNotEmpty || note.isNotEmpty;
+    return title != entry.title || note != entry.note;
+  }
 
   Future<bool> _confirmLeave() async {
     final leave = await showDialog<bool>(
@@ -93,7 +104,7 @@ class _AddPageState extends State<AddPage> {
       JournalEntry(
         title: title,
         note: _noteController.text.trim(),
-        createdAt: DateTime.now(),
+        createdAt: widget.entry?.createdAt ?? DateTime.now(),
       ),
     );
   }
@@ -112,7 +123,7 @@ class _AddPageState extends State<AddPage> {
           },
           child: Scaffold(
             appBar: AppBar(
-              title: const Text('Add'),
+              title: Text(widget.entry == null ? 'Add' : 'Edit'),
             ),
             body: SafeArea(
               child: ListView(

@@ -65,6 +65,13 @@ class _HomePageState extends State<HomePage> {
     if (entry != null) _controller.add(entry);
   }
 
+  Future<void> _openDetail(JournalEntry entry) async {
+    final updated = await Navigator.of(context).push<JournalEntry>(
+      MaterialPageRoute(builder: (_) => DetailPage(entry: entry)),
+    );
+    if (updated != null) _controller.update(entry, updated);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
@@ -120,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                         onDismissed: (_) => _controller.remove(entry),
                         child: JournalCard(
                           entry: entry,
-                          onTap: () => _open(DetailPage(entry: entry)),
+                          onTap: () => _openDetail(entry),
                         ),
                       );
                     },

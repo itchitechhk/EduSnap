@@ -129,4 +129,51 @@ void main() {
     expect(find.text('Water cycle'), findsNothing);
     expect(find.text('Photosynthesis'), findsOneWidget);
   });
+
+  testWidgets('Edit updates Detail and the list', (tester) async {
+    await tester.pumpWidget(const MyApp());
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Water cycle'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Edit'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Water cycle'), findsOneWidget);
+    expect(
+      find.text('Evaporation, condensation, precipitation.'),
+      findsOneWidget,
+    );
+
+    await tester.tap(find.byIcon(Icons.arrow_back));
+    await tester.pumpAndSettle();
+    expect(find.text('Leave without saving?'), findsNothing);
+    expect(find.text('Water cycle'), findsOneWidget);
+
+    await tester.tap(find.text('Edit'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextFormField).at(0), 'Atoms');
+    await tester.enterText(find.byType(TextFormField).at(1), 'Smallest unit.');
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Atoms'), findsOneWidget);
+    expect(find.text('Smallest unit.'), findsOneWidget);
+    expect(find.text('2026-11-03'), findsOneWidget);
+    expect(find.text('Water cycle'), findsNothing);
+
+    await tester.tap(find.text('Back'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Atoms'), findsOneWidget);
+    expect(find.text('Smallest unit.'), findsOneWidget);
+    expect(find.text('2026-11-03'), findsOneWidget);
+    expect(find.text('Water cycle'), findsNothing);
+    await tester.scrollUntilVisible(find.text('Atoms'), 200);
+    expect(
+      tester.getTopLeft(find.text('Fractions')).dy,
+      lessThan(tester.getTopLeft(find.text('Atoms')).dy),
+    );
+  });
 }
