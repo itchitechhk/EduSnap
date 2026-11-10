@@ -1,40 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:edusnap/main.dart';
 
+Future<void> _addEntry(
+  WidgetTester tester, {
+  required String title,
+  required String note,
+}) async {
+  await tester.tap(find.byIcon(Icons.add));
+  await tester.pumpAndSettle();
+  await tester.enterText(find.byType(TextFormField).at(0), title);
+  await tester.enterText(find.byType(TextFormField).at(1), note);
+  await tester.tap(find.text('Save'));
+  await tester.pumpAndSettle();
+}
+
 void main() {
-  testWidgets('List navigates to Detail, Add, and Settings', (tester) async {
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+  });
+
+  testWidgets('List starts empty and opens Add and Settings', (tester) async {
     await tester.pumpWidget(const MyApp());
-    await tester.pump(const Duration(milliseconds: 300));
     await tester.pumpAndSettle();
 
     expect(find.text('List'), findsWidgets);
-    expect(find.text('Water cycle'), findsOneWidget);
-    expect(find.text('Photosynthesis'), findsOneWidget);
-    expect(find.text('2026-11-01'), findsOneWidget);
-    expect(
-      tester.getTopLeft(find.text('Water cycle')).dy,
-      lessThan(tester.getTopLeft(find.text('Photosynthesis')).dy),
-    );
-
-    await tester.tap(find.text('Water cycle'));
-    await tester.pumpAndSettle();
-    expect(find.text('Water cycle'), findsOneWidget);
-    expect(find.text('2026-11-03'), findsOneWidget);
-    expect(
-      find.text('Evaporation, condensation, precipitation.'),
-      findsOneWidget,
-    );
-    expect(
-      tester.getTopRight(find.text('2026-11-03')).dx,
-      greaterThan(tester.getCenter(find.text('Water cycle')).dx),
-    );
-    await tester.tap(find.text('Back'));
-    await tester.pumpAndSettle();
-
-    await tester.scrollUntilVisible(find.text('Fractions'), 200);
-    expect(find.text('Fractions'), findsOneWidget);
+    expect(find.byType(Dismissible), findsNothing);
+    expect(find.text('No entries yet.\nTap + to add one.'), findsOneWidget);
 
     for (final target in [
       (icon: Icons.settings, name: 'Settings', back: find.text('Back')),
@@ -52,7 +46,6 @@ void main() {
 
   testWidgets('Back asks before leaving unsaved text', (tester) async {
     await tester.pumpWidget(const MyApp());
-    await tester.pump(const Duration(milliseconds: 300));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byIcon(Icons.add));
@@ -78,7 +71,6 @@ void main() {
 
   testWidgets('Save returns a new entry to the list', (tester) async {
     await tester.pumpWidget(const MyApp());
-    await tester.pump(const Duration(milliseconds: 300));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byIcon(Icons.add));
@@ -94,24 +86,20 @@ void main() {
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
-    await tester.scrollUntilVisible(find.text('Mitosis'), 200);
     expect(find.text('Mitosis'), findsOneWidget);
     expect(find.text('Cells divide.'), findsOneWidget);
+
+    await _addEntry(tester, title: 'Photosynthesis', note: 'Light to sugar.');
     expect(
       tester.getTopLeft(find.text('Photosynthesis')).dy,
       lessThan(tester.getTopLeft(find.text('Mitosis')).dy),
-    );
-    await tester.scrollUntilVisible(find.text('Fractions'), 200);
-    expect(
-      tester.getTopLeft(find.text('Mitosis')).dy,
-      lessThan(tester.getTopLeft(find.text('Fractions')).dy),
     );
   });
 
   testWidgets('Swipe left removes a journal entry', (tester) async {
     await tester.pumpWidget(const MyApp());
-    await tester.pump(const Duration(milliseconds: 300));
     await tester.pumpAndSettle();
+    await _addEntry(tester, title: 'Water cycle', note: 'Rain falls.');
 
     await tester.drag(find.byType(Dismissible).first, const Offset(-500, 0));
     await tester.pumpAndSettle();
@@ -127,16 +115,28 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Water cycle'), findsNothing);
-    expect(find.text('Photosynthesis'), findsOneWidget);
   });
 
   testWidgets('Edit updates Detail and the list', (tester) async {
     await tester.pumpWidget(const MyApp());
-    await tester.pump(const Duration(milliseconds: 300));
     await tester.pumpAndSettle();
+    await _addEntry(
+      tester,
+      title: 'Water cycle',
+      note: 'Evaporation, condensation, precipitation.',
+    );
 
     await tester.tap(find.text('Water cycle'));
     await tester.pumpAndSettle();
+    expect(
+      find.textContaining('Created on'),
+      findsOneWidget,
+    );
+    expect(
+      tester.getTopRight(find.textContaining('Created on')).dx,
+      greaterThan(tester.getCenter(find.text('Water cycle')).dx),
+    );
+
     await tester.tap(find.text('Edit'));
     await tester.pumpAndSettle();
 
@@ -160,7 +160,6 @@ void main() {
 
     expect(find.text('Atoms'), findsOneWidget);
     expect(find.text('Smallest unit.'), findsOneWidget);
-    expect(find.text('2026-11-03'), findsOneWidget);
     expect(find.text('Water cycle'), findsNothing);
 
     await tester.tap(find.text('Back'));
@@ -168,12 +167,6 @@ void main() {
 
     expect(find.text('Atoms'), findsOneWidget);
     expect(find.text('Smallest unit.'), findsOneWidget);
-    expect(find.text('2026-11-03'), findsOneWidget);
     expect(find.text('Water cycle'), findsNothing);
-    await tester.scrollUntilVisible(find.text('Atoms'), 200);
-    expect(
-      tester.getTopLeft(find.text('Fractions')).dy,
-      lessThan(tester.getTopLeft(find.text('Atoms')).dy),
-    );
   });
 }

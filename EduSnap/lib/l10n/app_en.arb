@@ -1,0 +1,57 @@
+{
+  "@@locale": "en",
+  "appName": "EduSnap",
+  "tagline": "Capture. Learn. Remember.",
+  "getStarted": "Get Started",
+  "settings": "Settings",
+  "language": "Language",
+  "storageUsage": "Storage usage",
+  "storageUsageValue": "{size} KB",
+  "@storageUsageValue": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "english": "English",
+  "chinese": "Chinese",
+  "japanese": "Japanese",
+  "back": "Back",
+  "list": "List",
+  "emptyListHint": "No entries yet.\nTap + to add one.",
+  "add": "Add",
+  "edit": "Edit",
+  "save": "Save",
+  "title": "Title",
+  "note": "Note",
+  "addPhoto": "Add photo",
+  "changePhoto": "Change photo",
+  "choosePhoto": "Choose photo",
+  "gallery": "Gallery",
+  "camera": "Camera",
+  "cameraAccessNeeded": "Camera access is needed to take a photo.",
+  "photoLibraryAccessNeeded": "Photo library access is needed to choose a photo.",
+  "couldNotOpenPhotoPicker": "Could not open the photo picker",
+  "notNow": "Not now",
+  "openSettings": "Open settings",
+  "leaveWithoutSaving": "Leave without saving?",
+  "stay": "Stay",
+  "leave": "Leave",
+  "titleMissing": "Title is missing",
+  "selectedPhoto": "Selected photo",
+  "photo": "Photo",
+  "noPhoto": "No photo",
+  "deleteThisEntry": "Delete this entry?",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "emptyValue": "-",
+  "createdOn": "Created on {date}",
+  "@createdOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  }
+}

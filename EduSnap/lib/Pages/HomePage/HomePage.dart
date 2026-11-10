@@ -1,3 +1,4 @@
+import 'package:edusnap/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 import '../../Component/JournalCard/JournalCard.dart';
@@ -37,19 +38,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<bool> _confirmDelete() async {
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
-          content: const Text('Delete this entry?'),
+          content: Text(l10n.deleteThisEntry),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(dialogContext, false),
-              child: const Text('Cancel'),
+              child: Text(l10n.cancel),
             ),
             TextButton(
               onPressed: () => Navigator.pop(dialogContext, true),
-              child: const Text('Delete'),
+              child: Text(l10n.delete),
             ),
           ],
         );
@@ -62,18 +64,19 @@ class _HomePageState extends State<HomePage> {
     final entry = await Navigator.of(context).push<JournalEntry>(
       MaterialPageRoute(builder: (_) => const AddPage()),
     );
-    if (entry != null) _controller.add(entry);
+    if (entry != null) await _controller.add(entry);
   }
 
   Future<void> _openDetail(JournalEntry entry) async {
     final updated = await Navigator.of(context).push<JournalEntry>(
       MaterialPageRoute(builder: (_) => DetailPage(entry: entry)),
     );
-    if (updated != null) _controller.update(entry, updated);
+    if (updated != null) await _controller.update(entry, updated);
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return ListenableBuilder(
       listenable: _controller,
       builder: (context, _) {
@@ -82,26 +85,31 @@ class _HomePageState extends State<HomePage> {
             leading: IconButton(
               onPressed: () => _open(const SettingsPage()),
               icon: const Icon(Icons.settings),
-              tooltip: 'Settings',
+              tooltip: l10n.settings,
             ),
-            title: const Text('List'),
+            title: Text(l10n.list),
             actions: [
               IconButton(
                 onPressed: _openAdd,
                 icon: const Icon(Icons.add),
-                tooltip: 'Add',
+                tooltip: l10n.add,
               ),
             ],
           ),
           body: SafeArea(
-            child: Column(
-              children: [
-                Text(
-                  'List',
-                  style: Theme.of(context).textTheme.displaySmall,
-                ),
-                Expanded(
-                  child: ListView.builder(
+            child: _controller.entries.isEmpty
+                ? Center(
+                    child: Text(
+                      l10n.emptyListHint,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurfaceVariant,
+                          ),
+                    ),
+                  )
+                : ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: _controller.entries.length,
                     itemBuilder: (context, index) {
@@ -124,7 +132,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         confirmDismiss: (_) => _confirmDelete(),
-                        onDismissed: (_) => _controller.remove(entry),
+                        onDismissed: (_) async => _controller.remove(entry),
                         child: JournalCard(
                           entry: entry,
                           onTap: () => _openDetail(entry),
@@ -132,9 +140,6 @@ class _HomePageState extends State<HomePage> {
                       );
                     },
                   ),
-                ),
-              ],
-            ),
           ),
         );
       },

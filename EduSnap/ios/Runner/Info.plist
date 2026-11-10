@@ -26,6 +26,10 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>EduSnap uses the camera to add photos to journal entries.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>EduSnap uses your photo library to add photos to journal entries.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

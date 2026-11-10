@@ -1,0 +1,57 @@
+{
+  "@@locale": "zh",
+  "appName": "EduSnap",
+  "tagline": "拍攝。學習。記住。",
+  "getStarted": "開始使用",
+  "settings": "設定",
+  "language": "語言",
+  "storageUsage": "儲存空間",
+  "storageUsageValue": "{size} KB",
+  "@storageUsageValue": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "english": "English",
+  "chinese": "中文",
+  "japanese": "日本語",
+  "back": "返回",
+  "list": "清單",
+  "emptyListHint": "尚無項目。\n點一下 + 來新增。",
+  "add": "新增",
+  "edit": "編輯",
+  "save": "儲存",
+  "title": "標題",
+  "note": "筆記",
+  "addPhoto": "新增照片",
+  "changePhoto": "更換照片",
+  "choosePhoto": "選擇照片",
+  "gallery": "相簿",
+  "camera": "相機",
+  "cameraAccessNeeded": "需要相機權限才能拍照。",
+  "photoLibraryAccessNeeded": "需要照片圖庫權限才能選擇照片。",
+  "couldNotOpenPhotoPicker": "無法開啟照片選擇器",
+  "notNow": "暫時不要",
+  "openSettings": "開啟設定",
+  "leaveWithoutSaving": "要離開且不儲存嗎？",
+  "stay": "留下",
+  "leave": "離開",
+  "titleMissing": "尚未填寫標題",
+  "selectedPhoto": "已選取的照片",
+  "photo": "照片",
+  "noPhoto": "沒有照片",
+  "deleteThisEntry": "要刪除這個項目嗎？",
+  "cancel": "取消",
+  "delete": "刪除",
+  "emptyValue": "-",
+  "createdOn": "{date} 建立",
+  "@createdOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  }
+}

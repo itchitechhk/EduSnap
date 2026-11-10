@@ -1,14 +1,11 @@
+import 'package:edusnap/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
+import '../../Component/JournalPhoto/JournalPhoto.dart';
 import '../../Models/JournalEntry.dart';
+import '../../Utils/journal_date.dart';
 import '../Add/AddPage.dart';
 import 'DetailPageController.dart';
-
-String _formatDate(DateTime date) {
-  final month = date.month.toString().padLeft(2, '0');
-  final day = date.day.toString().padLeft(2, '0');
-  return '${date.year}-$month-$day';
-}
 
 class DetailPage extends StatefulWidget {
   const DetailPage({super.key, required this.entry});
@@ -48,6 +45,7 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return ListenableBuilder(
       listenable: _controller,
       builder: (context, _) {
@@ -59,14 +57,16 @@ class _DetailPageState extends State<DetailPage> {
           },
           child: Scaffold(
             body: SafeArea(
-              child: Padding(
+              child: SingleChildScrollView(
                 padding: const EdgeInsets.all(24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Align(
                       alignment: Alignment.centerRight,
-                      child: Text(_formatDate(_entry.createdAt)),
+                      child: Text(
+                        l10n.createdOn(formatJournalDate(_entry.createdAt)),
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -74,6 +74,8 @@ class _DetailPageState extends State<DetailPage> {
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
+                    const SizedBox(height: 16),
+                    JournalPhoto(bytes: _entry.imageBytes, showLabel: true),
                     const SizedBox(height: 16),
                     DecoratedBox(
                       decoration: BoxDecoration(
@@ -90,11 +92,11 @@ class _DetailPageState extends State<DetailPage> {
                     const SizedBox(height: 24),
                     TextButton(
                       onPressed: _edit,
-                      child: const Text('Edit'),
+                      child: Text(l10n.edit),
                     ),
                     TextButton(
                       onPressed: _close,
-                      child: const Text('Back'),
+                      child: Text(l10n.back),
                     ),
                   ],
                 ),

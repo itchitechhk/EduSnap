@@ -1,3 +1,4 @@
+import 'package:edusnap/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 import 'LandingPageController.dart';
@@ -26,6 +27,7 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return ListenableBuilder(
       listenable: _controller,
       builder: (context, _) {
@@ -38,7 +40,7 @@ class _LandingPageState extends State<LandingPage> {
                 children: [
                   const Spacer(),
                   Text(
-                    'EduSnap',
+                    l10n.appName,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.displaySmall?.copyWith(
                           fontWeight: FontWeight.bold,
@@ -46,7 +48,7 @@ class _LandingPageState extends State<LandingPage> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'Capture. Learn. Remember.',
+                    l10n.tagline,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -63,7 +65,7 @@ class _LandingPageState extends State<LandingPage> {
                             width: 20,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : const Text('Get Started'),
+                        : Text(l10n.getStarted),
                   ),
                   const SizedBox(height: 24),
                 ],

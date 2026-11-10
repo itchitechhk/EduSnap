@@ -1,0 +1,57 @@
+{
+  "@@locale": "ja",
+  "appName": "EduSnap",
+  "tagline": "撮影。学習。記憶。",
+  "getStarted": "はじめる",
+  "settings": "設定",
+  "language": "言語",
+  "storageUsage": "ストレージ使用量",
+  "storageUsageValue": "{size} KB",
+  "@storageUsageValue": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "english": "English",
+  "chinese": "中文",
+  "japanese": "日本語",
+  "back": "戻る",
+  "list": "一覧",
+  "emptyListHint": "まだ項目がありません。\n+ をタップして追加してください。",
+  "add": "追加",
+  "edit": "編集",
+  "save": "保存",
+  "title": "タイトル",
+  "note": "メモ",
+  "addPhoto": "写真を追加",
+  "changePhoto": "写真を変更",
+  "choosePhoto": "写真を選択",
+  "gallery": "ギャラリー",
+  "camera": "カメラ",
+  "cameraAccessNeeded": "写真を撮るにはカメラへのアクセスが必要です。",
+  "photoLibraryAccessNeeded": "写真を選ぶにはフォトライブラリへのアクセスが必要です。",
+  "couldNotOpenPhotoPicker": "写真ピッカーを開けませんでした",
+  "notNow": "後で",
+  "openSettings": "設定を開く",
+  "leaveWithoutSaving": "保存せずに離れますか？",
+  "stay": "残る",
+  "leave": "離れる",
+  "titleMissing": "タイトルが未入力です",
+  "selectedPhoto": "選択した写真",
+  "photo": "写真",
+  "noPhoto": "写真なし",
+  "deleteThisEntry": "この項目を削除しますか？",
+  "cancel": "キャンセル",
+  "delete": "削除",
+  "emptyValue": "-",
+  "createdOn": "{date} に作成",
+  "@createdOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  }
+}
