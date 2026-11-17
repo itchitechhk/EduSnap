@@ -1,6 +1,7 @@
 import 'package:edusnap/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
+import '../../Duo/DuoLayoutController.dart';
 import '../../Locale/LocaleController.dart';
 import '../../Locale/locale_labels.dart';
 
@@ -16,6 +17,9 @@ class LanguagePage extends StatelessWidget {
       builder: (context, _) {
         return Scaffold(
           appBar: AppBar(
+            // Native Duo side-rail Back replaces the Flutter leading Back.
+            automaticallyImplyLeading:
+                !(DuoScope.maybeOf(context)?.isSideBackActive ?? false),
             title: Text(l10n.language),
           ),
           body: ListView(

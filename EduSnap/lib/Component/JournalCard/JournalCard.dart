@@ -16,31 +16,44 @@ class JournalCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     return Card(
-      child: ListTile(
-        onTap: onTap,
-        isThreeLine: true,
-        leading: JournalPhoto(
-          bytes: entry.imageBytes,
-          width: 56,
-          height: 56,
-        ),
-        title: Text(entry.title),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              entry.note,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final showLeading = constraints.maxWidth >= 120;
+          return ListTile(
+            onTap: onTap,
+            isThreeLine: true,
+            leading: showLeading
+                ? JournalPhoto(
+                    bytes: entry.imageBytes,
+                    width: 56,
+                    height: 56,
+                  )
+                : null,
+            title: Text(
+              entry.title,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            Text(
-              l10n.createdOn(formatJournalDate(entry.createdAt)),
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  entry.note,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  l10n.createdOn(formatJournalDate(entry.createdAt)),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

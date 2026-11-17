@@ -33,6 +33,12 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get appVersion => '版本';
+
+  @override
+  String get buildNumber => '建置編號';
+
+  @override
   String get english => 'English';
 
   @override
@@ -160,6 +166,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String storageUsageValue(String size) {
     return '$size KB';
   }
+
+  @override
+  String get appVersion => '版本';
+
+  @override
+  String get buildNumber => '建置編號';
 
   @override
   String get english => 'English';

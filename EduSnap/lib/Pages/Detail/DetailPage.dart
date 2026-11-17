@@ -2,15 +2,25 @@ import 'package:edusnap/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 import '../../Component/JournalPhoto/JournalPhoto.dart';
+import '../../Duo/DuoLayoutController.dart';
 import '../../Models/JournalEntry.dart';
 import '../../Utils/journal_date.dart';
 import '../Add/AddPage.dart';
 import 'DetailPageController.dart';
 
 class DetailPage extends StatefulWidget {
-  const DetailPage({super.key, required this.entry});
+  const DetailPage({
+    super.key,
+    required this.entry,
+    this.embedded = false,
+    this.onEntryUpdated,
+    this.onClose,
+  });
 
   final JournalEntry entry;
+  final bool embedded;
+  final ValueChanged<JournalEntry>? onEntryUpdated;
+  final VoidCallback? onClose;
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -28,6 +38,14 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   @override
+  void didUpdateWidget(covariant DetailPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.entry != widget.entry) {
+      _entry = widget.entry;
+    }
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
@@ -39,23 +57,47 @@ class _DetailPageState extends State<DetailPage> {
     );
     if (!mounted || updated == null) return;
     setState(() => _entry = updated);
+    widget.onEntryUpdated?.call(updated);
   }
 
-  void _close() => Navigator.of(context).pop(_entry);
+  void _close() {
+    if (widget.embedded) {
+      widget.onClose?.call();
+      return;
+    }
+    Navigator.of(context).pop(_entry);
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final duo = DuoScope.maybeOf(context);
+    final hideFlutterBack = duo?.isSideBackActive ?? false;
+
     return ListenableBuilder(
       listenable: _controller,
       builder: (context, _) {
         return PopScope(
-          canPop: false,
+          canPop: widget.embedded,
           onPopInvokedWithResult: (didPop, result) {
             if (didPop) return;
             _close();
           },
           child: Scaffold(
+            appBar: widget.embedded
+                ? AppBar(
+                    automaticallyImplyLeading: false,
+                    title: Text(_entry.title),
+                    actions: [
+                      if (!hideFlutterBack)
+                        IconButton(
+                          onPressed: _close,
+                          icon: const Icon(Icons.close),
+                          tooltip: l10n.back,
+                        ),
+                    ],
+                  )
+                : null,
             body: SafeArea(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(24),
@@ -68,12 +110,14 @@ class _DetailPageState extends State<DetailPage> {
                         l10n.createdOn(formatJournalDate(_entry.createdAt)),
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      _entry.title,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
+                    if (!widget.embedded) ...[
+                      const SizedBox(height: 8),
+                      Text(
+                        _entry.title,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                    ],
                     const SizedBox(height: 16),
                     JournalPhoto(bytes: _entry.imageBytes, showLabel: true),
                     const SizedBox(height: 16),
@@ -94,10 +138,11 @@ class _DetailPageState extends State<DetailPage> {
                       onPressed: _edit,
                       child: Text(l10n.edit),
                     ),
-                    TextButton(
-                      onPressed: _close,
-                      child: Text(l10n.back),
-                    ),
+                    if (!widget.embedded && !hideFlutterBack)
+                      TextButton(
+                        onPressed: _close,
+                        child: Text(l10n.back),
+                      ),
                   ],
                 ),
               ),

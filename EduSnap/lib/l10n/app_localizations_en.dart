@@ -33,6 +33,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get appVersion => 'Version';
+
+  @override
+  String get buildNumber => 'Build';
+
+  @override
   String get english => 'English';
 
   @override

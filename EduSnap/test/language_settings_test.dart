@@ -1,11 +1,19 @@
 import 'package:edusnap/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   setUp(() {
     SharedPreferences.setMockInitialValues({});
+    PackageInfo.setMockInitialValues(
+      appName: 'edusnap',
+      packageName: 'com.edusnap.edusnap',
+      version: '1.1.0',
+      buildNumber: '2',
+      buildSignature: '',
+    );
   });
 
   testWidgets('Language page switches UI and survives relaunch', (tester) async {

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../Duo/DuoLayoutController.dart';
 import '../../Models/JournalEntry.dart';
 import 'AddPageController.dart';
 
@@ -248,6 +249,9 @@ class _AddPageState extends State<AddPage> {
           },
           child: Scaffold(
             appBar: AppBar(
+              // Native Duo side-rail Back replaces the Flutter leading Back.
+              automaticallyImplyLeading:
+                  !(DuoScope.maybeOf(context)?.isSideBackActive ?? false),
               title: Text(widget.entry == null ? l10n.add : l10n.edit),
             ),
             body: SafeArea(

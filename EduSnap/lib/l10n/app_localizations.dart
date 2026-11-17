@@ -143,6 +143,18 @@ abstract class AppLocalizations {
   /// **'{size} KB'**
   String storageUsageValue(String size);
 
+  /// No description provided for @appVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get appVersion;
+
+  /// No description provided for @buildNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Build'**
+  String get buildNumber;
+
   /// No description provided for @english.
   ///
   /// In en, this message translates to:

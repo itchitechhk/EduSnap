@@ -20,13 +20,19 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     super.initState();
     _controller = SettingsPageController();
-    _controller.loadStorageUsage();
+    _controller.load();
   }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  TextStyle? _trailingStyle(BuildContext context) {
+    return Theme.of(context).textTheme.bodyLarge?.copyWith(
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        );
   }
 
   @override
@@ -39,12 +45,12 @@ class _SettingsPageState extends State<SettingsPage> {
         final storageValue = _controller.isLoadingStorage
             ? l10n.emptyValue
             : l10n.storageUsageValue(_controller.storageKbLabel);
-        final storageTrailing = Text(
-          storageValue,
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-        );
+        final versionValue = _controller.isLoadingPackageInfo
+            ? l10n.emptyValue
+            : (_controller.version ?? l10n.emptyValue);
+        final buildValue = _controller.isLoadingPackageInfo
+            ? l10n.emptyValue
+            : (_controller.buildNumber ?? l10n.emptyValue);
         return Scaffold(
           body: SafeArea(
             child: Padding(
@@ -66,11 +72,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       children: [
                         Text(
                           localeLabel(l10n, localeController.locale),
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
-                              ),
+                          style: _trailingStyle(context),
                         ),
                         const Icon(Icons.chevron_right),
                       ],
@@ -86,7 +88,26 @@ class _SettingsPageState extends State<SettingsPage> {
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text(l10n.storageUsage),
-                    trailing: storageTrailing,
+                    trailing: Text(
+                      storageValue,
+                      style: _trailingStyle(context),
+                    ),
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(l10n.appVersion),
+                    trailing: Text(
+                      versionValue,
+                      style: _trailingStyle(context),
+                    ),
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(l10n.buildNumber),
+                    trailing: Text(
+                      buildValue,
+                      style: _trailingStyle(context),
+                    ),
                   ),
                   const Spacer(),
                   TextButton(
